@@ -70,7 +70,7 @@
 
     <p>
         A clean and simple Java-based web application deployed on
-        <strong>Apache Tomcat</strong> and built using Maven by Narasimha Nellore<strong>Maven</strong>.
+        <strong>Apache Tomcat</strong> and built using by<strong>Maven</strong>.
     </p>
 
     <div class="info">
