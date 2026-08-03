@@ -82,9 +82,7 @@
     </div>
 
     <footer>
-        © 2026 Sample Web App | DevOps Practice Project | 23 FEB 2026 || Slave Node built by Narasimha Nelloree
-Testing webhooks on3rd august
-    </footer>
+        © 2026 Sample Web App | DevOps Practice Project | 23 FEB 2026 || Testing the Webhooks by Narasimha Nellore
 </div>
 
 </body>
