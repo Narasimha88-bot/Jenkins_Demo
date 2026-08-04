@@ -79,7 +79,7 @@
         <p><strong>Java Version:</strong> JDK 17</p>
         <p><strong>Server:</strong> Apache Tomcat</p>
         <p><strong>Packaging:</strong> WAR</p>
-	<p>Testing the commit from the Jenkins agent VM by using the web hook</p>
+	<p>Testing the commit from the Jenkins agent VM by using the web hooks</p>
     </div>
 
     <footer>
