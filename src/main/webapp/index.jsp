@@ -83,7 +83,7 @@
     </div>
 
     <footer>
-        © 2026 Sample Web App | DevOps Practice Project | 23 FEB 2026 || Testing the Webhooks by Narasimha Nellore
+        © 2026 Sample Web App | DevOps Practice Project | 23 FEB 2026 || Testing the Webhooks by Narasimha Nellore || 4th August
 </div>
 
 </body>
