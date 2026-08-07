@@ -82,7 +82,7 @@
     </div>
 
     <footer>
-        Running the Webhook Configuration trigger to the worker Node ~
+        Running the Webhook Configuration trigger to the worker Node and deploy the Tomcat ~
 </div>
 
 </body>
