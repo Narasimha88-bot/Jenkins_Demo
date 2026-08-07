@@ -45,12 +45,12 @@
 
    <distributionManagement>
     <repository>
-        <id>central</id>
+        <id>libs-release-local</id>
         <name>ip-172-31-85-138-releases</name>
         <url>http://3.86.186.109:8081/artifactory/libs-release-local</url>
     </repository>
     <snapshotRepository>
-        <id>snapshots</id>
+        <id>libs-snapshot-local</id>
         <name>ip-172-31-85-138-snapshots</name>
         <url>http://3.86.186.109:8081/artifactory/libs-release-local</url>
     </snapshotRepository>
