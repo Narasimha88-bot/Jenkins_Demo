@@ -11,13 +11,13 @@
     <name>Sample Web Application</name>
     <description>A simple Java web application for Educational cause</description>
 
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.jupiter.version>5.9.3</junit.jupiter.version> <!-- JUnit version -->
-    </properties>
-
+   <properties>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <junit.jupiter.version>5.9.3</junit.jupiter.version>
+ </properties>
+         
     <dependencies>
         <!-- Servlet API for web development -->
         <dependency>
