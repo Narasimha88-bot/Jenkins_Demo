@@ -82,7 +82,7 @@
     </div>
 
     <footer>
-       Build has been triggred by nellore @~
+       Setup the build trigger by using the webhook and generate an artifact file @~
 </div>
 
 </body>
