@@ -22,35 +22,29 @@ pipeline {
             }
         }
         stage('Fetch Latest Artifact') {
-            steps {
-                sh '''
-                # Variables
-SNAPSHOT_REPO="http://18.208.178.82:8081/artifactory/api/storage/lib-snapshot-local/com/example/sample-webapp/1.2-SNAPSHOT"
-            TOMCAT_WEBAPPS="/opt/tomcat/tomcat-11/webapps"
+    steps {
+        sh '''
+        # Variables
+        SNAPSHOT_REPO="http://18.208.178.82:8081/artifactory/lib-snapshot-local/com/example/sample-webapp/1.2-SNAPSHOT"
+        TOMCAT_WEBAPPS="/opt/tomcat/tomcat-11/webapps"
 
-               # Get latest WAR file dynamically
-            LATEST_WAR=$(curl -u $USER:$PASS -s ${SNAPSHOT_REPO}/ | jq -r '.children[] | select(.uri | endswith(".war")) | .uri' | sort | tail -n1 | sed 's|/||')
+        # Extract latest WAR name from maven-metadata.xml
+        LATEST_WAR=$(curl -u $USER:$PASS -s ${SNAPSHOT_REPO}/maven-metadata.xml \
+          | xmllint --xpath "string(//snapshotVersion[extension='war']/value)" -)
 
-            echo "Latest snapshot artifact: $LATEST_WAR"
+        echo "Latest snapshot artifact: $LATEST_WAR"
 
-                # Download the latest WAR
-            curl -u $USER:$PASS -O ${SNAPSHOT_REPO}/$LATEST_WAR
+        # Download the latest WAR
+        curl -u $USER:$PASS -O ${SNAPSHOT_REPO}/$LATEST_WAR
 
-            # Deploy to Tomcat
-            cp $LATEST_WAR /opt/tomcat/tomcat-11/webapps/
-            
-            }
-        }
+        # Deploy to Tomcat
+        cp $LATEST_WAR $TOMCAT_WEBAPPS/
 
-        stage('Restart Tomcat') {
-            steps {
-                sudo systemctl restart tomcat
-                echo "Tomcat restarted with latest artifact."
-            }
-            '''
-        }
+        # Restart Tomcat
+        systemctl restart tomcat
+        '''
     }
-    }
+ }
 
     post {
         success {
@@ -60,4 +54,5 @@ SNAPSHOT_REPO="http://18.208.178.82:8081/artifactory/api/storage/lib-snapshot-lo
             echo '❌ Build or deployment failed. Check logs for details.'
         }
     }
+}
 }
