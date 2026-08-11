@@ -25,7 +25,7 @@ pipeline {
             steps {
                 sh '''
                 # Variables
-SNAPSHOT_REPO="http://18.208.178.82:8081/artifactory/lib-snapshot-local/com/example/sample-webapp/1.2-SNAPSHOT"
+SNAPSHOT_REPO="http://18.208.178.82:8081/artifactory/api/storage/lib-snapshot-local/com/example/sample-webapp/1.2-SNAPSHOT"
             TOMCAT_WEBAPPS="/opt/tomcat/tomcat-11/webapps"
 
                # Get latest WAR file dynamically
