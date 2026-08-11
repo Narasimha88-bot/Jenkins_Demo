@@ -30,7 +30,7 @@ pipeline {
 
                     # Print latest WAR name
                     LATEST_WAR=$(ls -t /tmp/*.war | head -1)
-                    echo "Latest WAR file: $LATEST_WAR"
+                    echo "Latest WAR file: $(basename $LATEST_WAR"
 
                     # Deploy to Tomcat
                     cp $LATEST_WAR /opt/tomcat/tomcat-11/webapps/
