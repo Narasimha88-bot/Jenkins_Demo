@@ -21,6 +21,33 @@ pipeline {
                 }
             }
         }
+        stage('Fetch Latest Artifact') {
+            steps {
+                sh '''
+                # Variables
+
+               # Get latest WAR file dynamically
+            LATEST_WAR=$(curl -u $USER:$PASS -s ${SNAPSHOT_REPO}/ | jq -r '.children[] | select(.uri | endswith(".war")) | .uri' | sort | tail -n1 | sed 's|/||')
+
+            echo "Latest snapshot artifact: $LATEST_WAR"
+
+                # Download the latest WAR
+            curl -u $USER:$PASS -O ${SNAPSHOT_REPO}/$LATEST_WAR
+
+            # Deploy to Tomcat
+            cp $LATEST_WAR /opt/tomcat/tomcat-11/webapps/
+            }
+        }
+
+        stage('Restart Tomcat') {
+            steps {
+                sh '''
+                sudo systemctl restart tomcat
+                echo "Tomcat restarted with latest artifact."
+                '''
+            }
+        }
+    }
     }
 
     post {
