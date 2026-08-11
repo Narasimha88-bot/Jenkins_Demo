@@ -1,7 +1,10 @@
 pipeline {
     agent any
 
-
+   tools {
+        maven 'maven3.9'   // Name from Global Tool Config
+        jdk 'JDK-21'          // Name from Global Tool Config
+    }
 
     stages {
         stage('Checkout') {
