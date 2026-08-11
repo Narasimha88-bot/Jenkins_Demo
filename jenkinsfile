@@ -2,7 +2,7 @@ pipeline {
     agent { label 'slave_node' }
 
     tools {
-        maven 'maven3.9'   // Name from Global Tool Config
+        maven 'maven3.9'
     }
 
     stages {
@@ -13,36 +13,35 @@ pipeline {
             }
         }
 
-        stage('Build & Deploy') {
+        stage('Build & Push to Artifactory') {
             steps {
-                // Inject managed settings.xml from Jenkins Config File Provider
                 configFileProvider([configFile(fileId: 'd2732c45-441e-483e-9295-5717053f62da', variable: 'MAVEN_SETTINGS')]) {
                     sh "mvn clean deploy -s $MAVEN_SETTINGS"
                 }
             }
         }
 
-        stage('Fetch Latest Artifact') {
+        stage('Download Artifact from Artifactory') {
+            steps {
+                configFileProvider([configFile(fileId: 'd2732c45-441e-483e-9295-5717053f62da', variable: 'MAVEN_SETTINGS')]) {
+                    sh '''
+                    mvn dependency:get \
+                      -DrepoId=lib-snapshot-local \
+                      -DrepoUrl=http://18.208.178.82:8081/artifactory/lib-snapshot-local \
+                      -Dartifact=sample-webapp-1.2-20260811.081228-1.war \
+                      -s $MAVEN_SETTINGS
+
+                    cp ~/.m2/repository/com/example/sample-webapp/sample-webapp-1.2-20260811.081228-1.war /opt/tomcat/tomcat-11/webapps/
+                    '''
+                }
+            }
+        }
+
+        stage('Restart Tomcat') {
             steps {
                 sh '''
-                # Variables
-                SNAPSHOT_REPO="http://18.208.178.82:8081/artifactory/lib-snapshot-local/com/example/sample-webapp/1.2-SNAPSHOT"
-                TOMCAT_WEBAPPS="/opt/tomcat/tomcat-11/webapps"
-
-                # Extract latest WAR name from maven-metadata.xml
-                LATEST_WAR=$(curl -u $USER:$PASS -s ${SNAPSHOT_REPO}/maven-metadata.xml \
-                  | xmllint --xpath "string(//snapshotVersion[extension='war']/value)" -)
-
-                echo "Latest snapshot artifact: $LATEST_WAR"
-
-                # Download the latest WAR
-                curl -u $USER:$PASS -O ${SNAPSHOT_REPO}/$LATEST_WAR
-
-                # Deploy to Tomcat
-                cp $LATEST_WAR $TOMCAT_WEBAPPS/
-
-                # Restart Tomcat
                 systemctl restart tomcat
+                echo "Tomcat restarted with latest artifact."
                 '''
             }
         }
@@ -50,10 +49,10 @@ pipeline {
 
     post {
         success {
-            echo '✅ Build and deployment to Artifactory completed successfully.'
+            echo '✅ Build, push to Artifactory, download, and Tomcat deployment completed.'
         }
         failure {
-            echo '❌ Build or deployment failed. Check logs for details.'
+            echo '❌ Pipeline failed. Check logs for details.'
         }
     }
 }
