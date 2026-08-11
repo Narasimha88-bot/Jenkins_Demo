@@ -82,7 +82,7 @@
     </div>
 
     <footer>
-       Complete setup to run the pipeline, deploy the artifactory to JFROG and download it then copy to the Tomcat Webapps folder
+       Complete setup to run the pipeline, deploy the artifactory to JFROG and download it then copy to the Tomcat Webapps folder by Nellore @~
 </div>
 
 </body>
