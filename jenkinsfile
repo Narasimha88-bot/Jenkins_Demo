@@ -36,16 +36,16 @@ pipeline {
 
             # Deploy to Tomcat
             cp $LATEST_WAR /opt/tomcat/tomcat-11/webapps/
+            
             }
         }
 
         stage('Restart Tomcat') {
             steps {
-                sh '''
                 sudo systemctl restart tomcat
                 echo "Tomcat restarted with latest artifact."
-                '''
             }
+            '''
         }
     }
     }
