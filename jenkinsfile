@@ -25,7 +25,7 @@ pipeline {
                     mvn -s $MAVEN_SETTINGS org.apache.maven.plugins:maven-dependency-plugin:3.7.0:copy \
                         -Dartifact=com.example:sample-webapp:1.2-SNAPSHOT:war \
                         -DoutputDirectory=/tmp \
-                        -DrepoUrl=http://artifactory.company.com/artifactory/lib-snapshot-local \
+                        # -DrepoUrl=http://artifactory.company.com/artifactory/lib-snapshot-local \
                         -Dtransitive=false
 
                      # After dependency:copy
