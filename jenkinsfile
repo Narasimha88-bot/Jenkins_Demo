@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/Narasimha88-bot/Jenkins_Demo.git'
+            }
+        }
+
+        stage('Build & Deploy') {
+            steps {
+                // Inject managed settings.xml from Jenkins Config File Provider
+                configFileProvider([configFile(fileId: 'd2732c45-441e-483e-9295-5717053f62da', variable: 'MAVEN_SETTINGS')]) {
+                    sh "mvn clean deploy -s $MAVEN_SETTINGS"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and deployment to Artifactory completed successfully.'
+        }
+        failure {
+            echo '❌ Build or deployment failed. Check logs for details.'
+        }
+    }
+}
