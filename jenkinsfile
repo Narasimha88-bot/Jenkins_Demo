@@ -15,32 +15,53 @@ pipeline {
 
         stage('Build & Push to Artifactory') {
             steps {
+                // Inject managed settings.xml (contains Artifactory credentials)
                 configFileProvider([configFile(fileId: 'd2732c45-441e-483e-9295-5717053f62da', variable: 'MAVEN_SETTINGS')]) {
                     sh "mvn clean deploy -s $MAVEN_SETTINGS"
                 }
             }
         }
 
-        stage('Download Artifact from Artifactory') {
+        stage('Download Latest Artifact') {
             steps {
                 configFileProvider([configFile(fileId: 'd2732c45-441e-483e-9295-5717053f62da', variable: 'MAVEN_SETTINGS')]) {
                     sh '''
-                    mvn dependency:get \
-                      -DrepoId=lib-snapshot-local \
-                      -DrepoUrl=http://18.208.178.82:8081/artifactory/lib-snapshot-local \
-                      -Dartifact=sample-webapp-1.2-20260811.081228-1.war \
-                      -s $MAVEN_SETTINGS
+                    GROUP_ID="com.example"
+                    ARTIFACT_ID="sample-webapp"
+                    VERSION="1.2-SNAPSHOT"
+                    PACKAGING="war"
+                    REPO_URL="http://artifactory.company.com/artifactory/lib-snapshot-local"
+                    LOCAL_DIR="/tmp"
 
-                    cp ~/.m2/repository/com/example/sample-webapp/sample-webapp-1.2-20260811.081228-1.war /opt/tomcat/tomcat-11/webapps/
+                    echo "Downloading latest snapshot WAR from Artifactory..."
+
+                    # Use Maven dependency plugin to resolve and copy latest snapshot
+                    mvn -s $MAVEN_SETTINGS org.apache.maven.plugins:maven-dependency-plugin:3.7.0:copy \
+                        -Dartifact=$GROUP_ID:$ARTIFACT_ID:$VERSION:$PACKAGING \
+                        -DoutputDirectory=$LOCAL_DIR \
+                        -DrepoUrl=$REPO_URL \
+                        -Dtransitive=false
+
+                    echo "Artifact downloaded to $LOCAL_DIR"
                     '''
                 }
             }
         }
 
-        stage('Restart Tomcat') {
+        stage('Deploy to Tomcat') {
             steps {
                 sh '''
+                LOCAL_DIR="/tmp"
+                TOMCAT_WEBAPPS="/opt/tomcat/tomcat-11/webapps"
+
+                echo "Deploying latest WAR to Tomcat..."
+
+                # Copy WAR into Tomcat webapps
+                cp $LOCAL_DIR/*.war $TOMCAT_WEBAPPS/
+
+                # Restart Tomcat
                 systemctl restart tomcat
+
                 echo "Tomcat restarted with latest artifact."
                 '''
             }
@@ -49,7 +70,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ Build, push to Artifactory, download, and Tomcat deployment completed.'
+            echo '✅ Build pushed to Artifactory, latest WAR downloaded, and deployed to Tomcat successfully.'
         }
         failure {
             echo '❌ Pipeline failed. Check logs for details.'
