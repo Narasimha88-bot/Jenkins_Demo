@@ -82,7 +82,7 @@
     </div>
 
     <footer>
-       Setup the build trigger by using the webhook and generate an artifact file @~
+       Complete setup to run the pipeline, deploy the artifactory to JFROG and download it then copy to the Tomcat Webapps folder
 </div>
 
 </body>
