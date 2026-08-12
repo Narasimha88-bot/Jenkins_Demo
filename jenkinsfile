@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'slave_node' }
+    agent { label 'slave_Node' }
 
     tools {
         maven 'maven3.9'
@@ -16,7 +16,7 @@ pipeline {
         stage('Build, Push & Deploy') {
             steps {
                 // Inject managed settings.xml once
-                configFileProvider([configFile(fileId: 'd2732c45-441e-483e-9295-5717053f62da', variable: 'MAVEN_SETTINGS')]) {
+                configFileProvider([configFile(fileId: 'b694ae1a-6f01-415a-9037-3b32c32f0550', variable: 'MAVEN_SETTINGS')]) {
                     sh '''
                     # Build & push to Artifactory
                     mvn clean deploy -s $MAVEN_SETTINGS
