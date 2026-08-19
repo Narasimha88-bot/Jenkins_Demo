@@ -21,7 +21,6 @@ pipeline {
                     sh '''
                     # Build & push to Artifactory
                     mvn clean deploy -s $MAVEN_SETTIN
-
                     # Download latest snapshot WAR
                     mvn -s $MAVEN_SETTIN org.apache.maven.plugins:maven-dependency-plugin:3.7.0:copy \
                         -Dartifact=com.example:sample-webapp:1.2-SNAPSHOT:war \
@@ -49,7 +48,7 @@ pipeline {
             echo '✅ Build pushed to Artifactory, latest WAR printed, and deployed to Tomcat successfully.'
         }
         failure {
-            echo '❌ Pipeline failed. Check logs for error logs and troubleshoot.'
+            echo '❌ Pipeline failed. Check logs for errors.'
         }
     }
 }
