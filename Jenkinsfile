@@ -1,8 +1,8 @@
-pipeline{
+pipeline {
     tools {
         maven 'maven3.9'
     }
-    stages{
+    stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', 
@@ -17,5 +17,13 @@ pipeline{
 
     }
 
+    }
+    post {
+        success {
+            echo '✅ Build pushed to Artifactory, latest WAR printed, and deployed to Tomcat successfully.'
+        }
+        failure {
+            echo '❌ Pipeline failed. Check logs for details.'
+        }
     }
 }
