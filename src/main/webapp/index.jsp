@@ -93,7 +93,7 @@
     </div>
 
     <footer>
-       Automated pipeline setup for testing and deployment by Nellore ✨
+       Automated pipeline setup for testing and deployment by Nellore Narasimha ✨
     </footer>
 </div>
 
